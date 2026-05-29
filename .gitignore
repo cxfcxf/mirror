@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+**/build/
+*.apk
+*.aab
+*.ap_
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.hprof
+
+# Native build
+**/.cxx/
+**/CMakeFiles/
+**/cmake_install.cmake
+**/Makefile
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keys / secrets
+keystore.properties
+*.jks
+*.keystore
+
+# Logs
+*.log
+
+# Docs (internal planning only)
+docs/
