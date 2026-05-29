@@ -26,9 +26,10 @@ Built on top of [android-airplay-server](https://github.com/jqssun/android-airpl
 ```bash
 # Clone with all native submodules
 git clone --recursive https://github.com/<your-username>/mirror
+cd mirror
 
 # Create local.properties (adjust paths if your SDK is elsewhere)
-cat > android-airplay-server/local.properties <<EOF
+cat > local.properties <<EOF
 sdk.dir=/Users/$USER/Library/Android/sdk
 EOF
 
@@ -36,7 +37,6 @@ EOF
 sdkmanager "ndk;27.0.12077973" "cmake;3.22.1"
 
 # Build
-cd android-airplay-server
 ./gradlew assembleDebug
 ```
 
@@ -50,7 +50,7 @@ adb connect <TV-IP>:5555
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 # Launch
-adb shell am start -n io.github.jqssun.airplay/.MainActivity
+adb shell am start -n com.cxfcxf.mirror/.MainActivity
 ```
 
 ## Usage
@@ -100,6 +100,6 @@ The AirPlay engine is the proven UxPlay native C library compiled via Android ND
 
 ## License
 
-GPLv3 — inherited from UxPlay. See [LICENSE](android-airplay-server/LICENSE).
+GPLv3 — inherited from UxPlay. See [LICENSE](LICENSE).
 
 This project uses a third-party GPL library for FairPlay handling whose legal status is unclear. Intended for personal use only.
