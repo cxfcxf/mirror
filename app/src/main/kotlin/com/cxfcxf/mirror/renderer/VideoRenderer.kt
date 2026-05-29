@@ -20,6 +20,8 @@ class VideoRenderer {
     private var cachedKeyframe: ByteArray? = null
     private var cachedKeyframePts: Long = 0
     private var cachedKeyframeH265 = false
+    // skip non-keyframes after a drop to avoid P-frame cascade corruption
+    @Volatile private var _waitForKeyframe = false
 
     // stats
     @Volatile var fps = 0; private set
@@ -108,8 +110,13 @@ class VideoRenderer {
                 }
             }
 
-            _feedToCodec(data, ntpTimeNs)
+            // after a drop+flush, skip P-frames until a keyframe arrives to prevent
+            // P-frame cascade corruption (corrupted blocks until next keyframe)
+            if (_waitForKeyframe && !_isKeyframe(data, isH265)) return
+
+            // drain before feeding to maximise available input slots
             drainOutput()
+            _feedToCodec(data, ntpTimeNs)
         }
     }
 
@@ -117,6 +124,7 @@ class VideoRenderer {
         val c = codec ?: return
         val idx = c.dequeueInputBuffer(5000)
         if (idx >= 0) {
+            _waitForKeyframe = false
             val buf = c.getInputBuffer(idx) ?: return
             buf.clear()
             buf.put(data)
@@ -124,6 +132,11 @@ class VideoRenderer {
         } else {
             droppedFrames++
             Log.w(TAG, "Decoder input queue full; dropping frame. drops=$droppedFrames")
+            // Flush decoder to prevent P-frame corruption cascade after the drop
+            try { c.flush() } catch (_: Exception) {}
+            _ptsBaseUs = Long.MIN_VALUE
+            _wallBaseNs = 0L
+            _waitForKeyframe = true
         }
     }
 
@@ -184,6 +197,7 @@ class VideoRenderer {
         _lastOutputFrameNs = 0L
         _ptsBaseUs = Long.MIN_VALUE
         _wallBaseNs = 0L
+        _waitForKeyframe = false
         codec?.let {
             try {
                 it.stop()
