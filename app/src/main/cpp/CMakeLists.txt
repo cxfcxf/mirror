@@ -26,6 +26,7 @@ add_library(plist STATIC
     ${PLIST_SRC}/base64.c
     ${PLIST_SRC}/bplist.c
     ${PLIST_SRC}/bytearray.c
+    ${PLIST_SRC}/common.c
     ${PLIST_SRC}/hashtable.c
     ${PLIST_SRC}/jplist.c
     ${PLIST_SRC}/jsmn.c
