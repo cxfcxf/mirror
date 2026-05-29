@@ -32,8 +32,8 @@ android {
         applicationId = "com.cxfcxf.mirror"
         minSdk = 26
         targetSdk = 35
-        versionCode = 8
-        versionName = "0.0.8"
+        versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 1
+        versionName = (project.findProperty("versionName") as String?) ?: "0.0.1"
 
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
