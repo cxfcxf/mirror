@@ -24,8 +24,8 @@ Built on top of [android-airplay-server](https://github.com/jqssun/android-airpl
 ## Build
 
 ```bash
-# Clone (all native C source is bundled — no submodules needed)
-git clone https://github.com/cxfcxf/mirror
+# Clone with native C dependencies
+git clone --recursive https://github.com/cxfcxf/mirror
 cd mirror
 
 # Create local.properties (adjust paths if your SDK is elsewhere)
