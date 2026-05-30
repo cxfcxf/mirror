@@ -107,13 +107,14 @@ class MainActivity : ComponentActivity() {
                     val serverState by viewModel.serverState.collectAsState()
                     val connectionCount by viewModel.connectionCount.collectAsState()
                     val videoAspect by viewModel.videoAspect.collectAsState()
+                    val audioOnly by viewModel.audioOnly.collectAsState()
 
                     when {
                         showTvSettings -> {
                             BackHandler { showTvSettings = false }
                             TvSettingsScreen(viewModel)
                         }
-                        connectionCount > 0 -> {
+                        connectionCount > 0 && !audioOnly -> {
                             var backConfirmPending by remember { mutableStateOf(false) }
                             val scope = rememberCoroutineScope()
                             BackHandler {
@@ -193,6 +194,16 @@ class MainActivity : ComponentActivity() {
     override fun onPictureInPictureModeChanged(inPip: Boolean, newConfig: Configuration) {
         super.onPictureInPictureModeChanged(inPip, newConfig)
         isInPip.value = inPip
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Service already bound but server was stopped (e.g. double-back exit):
+        // auto-restart so the app is usable when the user re-opens it.
+        val svc = service ?: return
+        if (viewModel.autoStart.value && svc.serverState.value == AirPlayService.ServerState.STOPPED) {
+            viewModel.startServer()
+        }
     }
 
     override fun onDestroy() {

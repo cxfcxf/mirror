@@ -355,6 +355,10 @@ class AirPlayService : Service(), RaopCallbackHandler {
         _connectionCount.value++
         log("Client connected (${_connectionCount.value})")
         if (!firstConnection) return
+        // Reset audio so the decoder starts fresh each connection. The iPad's
+        // AAC-ELD encoder resets its state on each new session; reusing the old
+        // MediaCodec causes it to silently drop the mismatched packets.
+        audioRenderer.stop()
         // conn_init is only a tcp pre-auth signal. pin-required sessions must wait for
         // onDisplayPin, otherwise the server ui can move before the client pin is current
         if (requiresPin()) return
