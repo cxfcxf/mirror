@@ -350,7 +350,7 @@ private fun DisplaySettings(viewModel: MainViewModel) {
         item {
             TvCycleRow(
                 title = "Resolution",
-                description = "Video resolution advertised to clients — press OK to cycle",
+                description = "Resolution advertised to clients — takes effect when iPad reconnects",
                 options = resolutionOptions,
                 currentValue = if (resolutionOptions.any { it.first == resolution }) resolution else "auto",
                 onValueChange = { viewModel.setResolution(it) },
@@ -359,7 +359,7 @@ private fun DisplaySettings(viewModel: MainViewModel) {
         item {
             TvCycleRow(
                 title = "Maximum FPS",
-                description = "Maximum frame rate advertised to clients — press OK to cycle",
+                description = "Max FPS advertised to clients — takes effect when iPad reconnects",
                 options = fpsOptions,
                 currentValue = maxFps.toString().let { v -> if (fpsOptions.any { it.first == v }) v else "60" },
                 onValueChange = { viewModel.setMaxFps(it.toIntOrNull() ?: 60) },
