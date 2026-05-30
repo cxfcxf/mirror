@@ -215,7 +215,7 @@ class AirPlayService : Service(), RaopCallbackHandler {
             NativeBridge.nativeSetPlist(nativeHandle, "audio_delay_micros", audioLatencyMs * 1000)
         }
 
-        // set display params
+        // set display params — "auto" means 1080p (AirPlay mirroring caps at 1080p)
         val res = prefs.getString(Prefs.RESOLUTION, Prefs.DEF_RESOLUTION)!!
         val resParts = res.split("x")
         val (w, h) = if (resParts.size == 2) {
