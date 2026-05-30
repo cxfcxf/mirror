@@ -335,7 +335,6 @@ private fun DisplaySettings(viewModel: MainViewModel) {
     val resolutionOptions = listOf(
         "1280x720"  to "1280 × 720  (720p)",
         "1920x1080" to "1920 × 1080  (1080p)",
-        "3840x2160" to "3840 × 2160  (4K — iPad Pro only)",
     )
     val fpsOptions = listOf(
         "24"  to "24 fps",
