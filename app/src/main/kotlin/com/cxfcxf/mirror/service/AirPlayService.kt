@@ -216,13 +216,12 @@ class AirPlayService : Service(), RaopCallbackHandler {
         }
 
         // set display params
-        val dm = resources.displayMetrics
         val res = prefs.getString(Prefs.RESOLUTION, Prefs.DEF_RESOLUTION)!!
-        val (w, h) = if (res != "auto" && res.contains("x")) {
-            val parts = res.split("x")
-            parts[0].toInt() to parts[1].toInt()
+        val resParts = res.split("x")
+        val (w, h) = if (resParts.size == 2) {
+            (resParts[0].toIntOrNull() ?: 1920) to (resParts[1].toIntOrNull() ?: 1080)
         } else {
-            dm.widthPixels to dm.heightPixels
+            1920 to 1080
         }
         videoRenderer.setResolution(w, h)
         _videoResolution.value = "${w}x${h}"

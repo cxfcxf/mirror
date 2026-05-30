@@ -333,10 +333,9 @@ private fun DisplaySettings(viewModel: MainViewModel) {
     val autoAudioMode by viewModel.autoAudioMode.collectAsState()
 
     val resolutionOptions = listOf(
-        "auto"      to "Auto",
         "1280x720"  to "1280 × 720  (720p)",
         "1920x1080" to "1920 × 1080  (1080p)",
-        "3840x2160" to "3840 × 2160  (4K)",
+        "3840x2160" to "3840 × 2160  (4K — iPad Pro only)",
     )
     val fpsOptions = listOf(
         "24"  to "24 fps",
@@ -352,7 +351,7 @@ private fun DisplaySettings(viewModel: MainViewModel) {
                 title = "Resolution",
                 description = "Resolution advertised to clients — takes effect when iPad reconnects",
                 options = resolutionOptions,
-                currentValue = if (resolutionOptions.any { it.first == resolution }) resolution else "auto",
+                currentValue = if (resolutionOptions.any { it.first == resolution }) resolution else "1920x1080",
                 onValueChange = { viewModel.setResolution(it) },
             )
         }
