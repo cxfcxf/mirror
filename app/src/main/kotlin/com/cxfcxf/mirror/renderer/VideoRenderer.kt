@@ -132,8 +132,9 @@ class VideoRenderer {
         } else {
             droppedFrames++
             Log.w(TAG, "Decoder input queue full; dropping frame. drops=$droppedFrames")
-            // Flush decoder to prevent P-frame corruption cascade after the drop
-            try { c.flush() } catch (_: Exception) {}
+            // flush() + start() clears corrupt decoder state. In synchronous mode,
+            // start() is required after flush() to re-enter Running sub-state.
+            try { c.flush(); c.start() } catch (_: Exception) {}
             _ptsBaseUs = Long.MIN_VALUE
             _wallBaseNs = 0L
             _waitForKeyframe = true
